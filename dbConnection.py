@@ -61,9 +61,25 @@ class DBHelper:
         cur.close()
         return data_detail_abs
 
-    
 
+    def get_count(self):
+        cur = self.cnx.cursor()
+        # query = "select id_karyawan, count(*) from absensi group_by(id_karyawan)"
+        # query = "SELECT id_karyawan, COUNT(*) FROM absensi GROUP BY(id_karyawan)"
+        query = "SELECT a.nama, b.id_karyawan, COUNT(*) FROM karyawan a, absensi b WHERE b.`id_karyawan` = a.`id` GROUP BY(id_karyawan);"
+
+        cur.execute(query)
+
+        data_count = []
+        for data in cur:
+            data_count.append(data)
+
+        cur.close()
+        return data_count
+
+    # def get_detail(self):
+    #     pass
 
 db = DBHelper('absen_bot', 'root', 'mysql', '127.0.0.1')
-asd = db.get_detail_absen()
+asd = db.get_count()
 print(asd)

@@ -3,8 +3,12 @@ import requests
 import time
 import urllib
 
+from dbConnection import * 
+
 TOKEN = '667837513:AAEHFaa4G5UZVEh6VYk95wOipejEHWZVPXI'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
+
+db = DBHelper('absen_bot', 'root', 'mysql', '127.0.0.1')
 
 def get_url(url):
     response = requests.get(url)
@@ -35,24 +39,35 @@ def handle_updates(updates):
     for update in updates["result"]:
         text = update["message"]["text"]
         chat = update["message"]["chat"]["id"]
-        items = db.get_items(chat)
-        if text == "/done":
-            keyboard = build_keyboard(items)
-            send_message("Select an item to delete", chat, keyboard)
-        elif text == "/start":
-            send_message("Welcome to your personal To Do list. Send any text to me and I'll store it as an item. Send /done to remove items", chat)
-        elif text.startswith("/"):
-            continue
-        elif text in items:
-            db.delete_item(text, chat)
-            items = db.get_items(chat)
-            keyboard = build_keyboard(items)
-            send_message("Select an item to delete", chat, keyboard)
-        else:
-            db.add_item(text, chat)
-            items = db.get_items(chat)
-            message = "\n".join(items)
-            send_message(message, chat)
+        # items = db.get_data_karyawan(chat)
+        items = db.get_data_karyawan()
+
+        if text == "/start":
+             send_message("Welcome to your personal To Do list. Send any text to me and I'll store it as an item. Send /done to remove items", chat)
+        elif text == "/list":
+            msg = ""
+            for i in items:
+                msg += str(i[1]) + " "
+            send_message(msg, chat)
+
+        # if text == "/done":
+        #     keyboard = build_keyboard(items)
+        #     send_message("Select an item to delete", chat, keyboard)
+        # elif text == "/start":
+        #     send_message("Welcome to your personal To Do list. Send any text to me and I'll store it as an item. Send /done to remove items", chat)
+        #     # response = 
+        # elif text.startswith("/"):
+        #     continue
+        # elif text in items:
+        #     db.delete_item(text, chat)
+        #     items = db.get_items(chat)
+        #     keyboard = build_keyboard(items)
+        #     send_message("Select an item to delete", chat, keyboard)
+        # else:
+        #     db.add_item(text, chat)
+        #     items = db.get_items(chat)
+        #     message = "\n".join(items)
+        #     send_message(message, chat)
 
 
 def get_last_chat_id_and_text(updates):
@@ -78,7 +93,7 @@ def send_message(text, chat_id, reply_markup=None):
 
 
 def main():
-    db.setup()
+    # db.setup()
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
