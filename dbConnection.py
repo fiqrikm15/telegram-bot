@@ -76,10 +76,3 @@ class DBHelper:
 
         cur.close()
         return data_count
-
-    # def get_detail(self):
-    #     pass
-
-# db = DBHelper('absen_bot', 'root', 'mysql', '127.0.0.1')
-# asd = db.get_count()
-# print(asd)
