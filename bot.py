@@ -40,14 +40,14 @@ def handle_updates(updates):
         text = update["message"]["text"]
         chat = update["message"]["chat"]["id"]
         # items = db.get_data_karyawan(chat)
-        items = db.get_data_karyawan()
+        items = db.get_count()
 
         if text == "/start":
              send_message("Welcome to your personal To Do list. Send any text to me and I'll store it as an item. Send /done to remove items", chat)
         elif text == "/list":
             msg = ""
             for i in items:
-                msg += str(i[1]) + " "
+                msg += "Nama: " + str(i[0]) + "\nJumlah Masuk: " + str(i[2]) + "\n\n"
             send_message(msg, chat)
 
         # if text == "/done":
