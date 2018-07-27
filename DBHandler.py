@@ -3,7 +3,7 @@ import mysql.connector
 from datetime import datetime, date, timedelta
 import pytz
 
-class DBHandle:
+class DBHandler:
     waktu = datetime.now()
 
     def __init__(self, _db, _username, _password, _host):
@@ -56,6 +56,7 @@ class DBHandle:
 
         return data_kar
 
+
     def get_absen(self):
         get = "select * from absen"
         cursor = self.cnx.cursor()
@@ -65,9 +66,57 @@ class DBHandle:
         for data in cursor:
             data_abs.append(data)
 
+        cursor.close()
         return data_abs
 
+    def get_absen_id(self, kcontact):
+        get = "select * from absen where kcontact=kcontact"
+        cursor = self.cnx.cursor()
+        data_abs = []
 
-# db = DBHandle('absen_bot', 'root', 'mysql', '127.0.0.1')
-# print(db.get_absen()[0][2])
+        cursor.execute(get)
+        for data in cursor:
+            data_abs.append(data)
+
+        cursor.close()
+        return data_abs
+
+    def get_spv_abs(self):
+        get = "select karyawan.spv, count(absen.id) as absen from karyawan left join absen on absen.kcontact = karyawan.kcontact group by  karyawan.spv order by absen;"
+        cursor = self.cnx.cursor()
+        data_abs = []
+
+        cursor.execute(get)
+        for data in cursor:
+            data_abs.append(data)
+
+        cursor.close()
+        return data_abs
+
+    def count_data(self):
+        query = "select count(*) from karyawan"
+        cur = self.cnx.cursor()
+
+        cur.execute(query)
+
+        res = cur.fetchone()
+
+        return res[0]
+
+
+    def check_registered(self, kcontact):
+        data_kar = self.get_karyawan()
+        check = False
+        # i = 0
+
+        for i in range(self.count_data()):
+            if kcontact == data_kar[i][0]:
+                check = True
+            else:
+                check = False
+
+        return check
+
+db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
+print(db.check_registered('AAK20'))
 
