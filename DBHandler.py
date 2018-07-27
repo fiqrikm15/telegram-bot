@@ -24,9 +24,6 @@ class DBHandle:
         else:
             print("Connection failed, please check your datbase connection")
 
-    def get_data(self):
-        pass
-
 
     def insert_karyawan(self, kcontact, nama, spv):
         insert = "insert into karyawan(kcontact, nama, spv) values('" + kcontact + "','" + nama + "','" + spv +"')"
@@ -48,6 +45,29 @@ class DBHandle:
         self.cnx.close()
 
 
-db = DBHandle('absen_bot', 'root', 'mysql', '127.0.0.1')
-print(db.insert_absen('AAK21', str(datetime.now())))
+    def get_karyawan(self):
+        get = "select * from karyawan"
+        cursor = self.cnx.cursor()
+        data_kar = []
+
+        cursor.execute(get)
+        for data in cursor:
+            data_kar.append(data)
+
+        return data_kar
+
+    def get_absen(self):
+        get = "select * from absen"
+        cursor = self.cnx.cursor()
+        data_abs = []
+
+        cursor.execute(get)
+        for data in cursor:
+            data_abs.append(data)
+
+        return data_abs
+
+
+# db = DBHandle('absen_bot', 'root', 'mysql', '127.0.0.1')
+# print(db.get_absen()[0][2])
 
