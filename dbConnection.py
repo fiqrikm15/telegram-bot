@@ -20,7 +20,31 @@ class DBHelper:
         if self.cnx:
             print("Connection success")
         else:
-            print("Connection failed")
+            print("Connection failed, please check your datbase connection")
+
+    def get_jumlah_data(self):
+        query = "select count(*) from karyawan"
+        cur = self.cnx.cursor()
+
+        cur.execute(query)
+
+        res = cur.fetchone()
+
+        return res[0]
+    
+
+    def get_detail_karyawan(self, nik):
+        query = "select * from karyawan where id=" + str(nik)
+        cur = self.cnx.cursor()
+        data_kar = []
+
+        cur.execute(query)
+
+        for i in cur:
+            data_kar.append(i)
+
+        return data_kar
+
 
     def get_data_karyawan(self):
         query = "select * from karyawan"
@@ -64,8 +88,6 @@ class DBHelper:
 
     def get_count(self):
         cur = self.cnx.cursor()
-        # query = "select id_karyawan, count(*) from absensi group_by(id_karyawan)"
-        # query = "SELECT id_karyawan, COUNT(*) FROM absensi GROUP BY(id_karyawan)"
         query = "SELECT a.nama, b.id_karyawan, COUNT(*) FROM karyawan a, absensi b WHERE b.`id_karyawan` = a.`id` GROUP BY(id_karyawan);"
 
         cur.execute(query)
@@ -76,3 +98,20 @@ class DBHelper:
 
         cur.close()
         return data_count
+
+    def search_data(self, nik):
+        query = "SELECT a.nama, b.id_karyawan, COUNT(*) FROM karyawan a, absensi b WHERE b.`id_karyawan` = a.`id` and a.id=" + str(nik) +" GROUP BY(id_karyawan);"
+        cur = self.cnx.cursor()
+
+        cur.execute(query)
+
+        data_karyawan = []
+        for i in cur:
+            data_karyawan.append(i)
+
+        cur.close()
+        return data_karyawan
+
+# db = DBHelper('absen_bot', 'root', 'mysql', '127.0.0.1')
+# a = db.get_detail_karyawan(1)
+# print(a[0])
