@@ -1,6 +1,8 @@
 from __future__ import print_function
 import mysql.connector
+from mysql.connector import errorcode
 from datetime import datetime, date, timedelta
+from mysql.connector.errors import *
 import pytz
 
 class DBHandler:
@@ -95,28 +97,27 @@ class DBHandler:
 
     def count_data(self):
         query = "select count(*) from karyawan"
-        cur = self.cnx.cursor()
+        cursor = self.cnx.cursor()
 
-        cur.execute(query)
+        cursor.execute(query)
 
-        res = cur.fetchone()
+        res = cursor.fetchone()
 
         return res[0]
 
 
     def check_registered(self, kcontact):
-        data_kar = self.get_karyawan()
-        check = False
-        # i = 0
+        query = "select count(kcontact) from karyawan where kcontact='"+str(kcontact)+"'"
+        cursor = self.cnx.cursor()
 
-        for i in range(self.count_data()):
-            if kcontact == data_kar[i][0]:
-                check = True
-            else:
-                check = False
+        cursor.execute(query)
+        count = cursor.fetchone()[0]
 
-        return check
+        if(count == 1):
+            return True
+        else:
+            return False
+
 
 db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
 print(db.check_registered('AAK20'))
-
