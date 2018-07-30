@@ -1,0 +1,16 @@
+/register;spv;kcontact;nama v
+res: anda sudah terdaftar
+
+/absen x
+res: anda telah absen pada tgl, jam
+
+/rekap;kcontact;tahun;bulan v
+2018/juli
+1. hadir pukul jam
+2. 
+
+/rekap;spv;tahun;bulan v
+kcontact = jumlah
+
+/rekap;sto v
+-sm jumlah sales/jumlah hasir

@@ -2,11 +2,13 @@ import json
 import requests
 import time
 import urllib
+import mysql.connector
+from mysql.connector import errorcode
 
+from DBHandler import DBHandler
 
-from dbConnection import DBHelper
-
-TOKEN = '535790419:AAFRBVqpDbw81agwWROi2BM410wR_AkUW3Y'
+#TOKEN = '535790419:AAFRBVqpDbw81agwWROi2BM410wR_AkUW3Y'
+TOKEN = '687645081:AAHPxLI1CM29sxIvGa730MiqjblJK-8wiV4'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
 """
@@ -16,7 +18,7 @@ usernama = 'root'
 password = 'mysql'
 host = 127.0.0.1/localhost
 """
-db = DBHelper('absen_bot', 'root', 'mysql', '127.0.0.1')
+db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
 
 
 def get_url(url):
@@ -51,97 +53,127 @@ def handle_updates(updates):
         text = update["message"]["text"]
         first_name = update["message"]["from"]["first_name"]
         chat = update["message"]["chat"]["id"]
-        # items = db.get_data_karyawan(chat)
-        txt = str(update['message']['text'])
+        # txt = str(update['message']['text'])
         items = None
 
         if text == "/start":
             msg = "Halo " + first_name + " jika ingin ke menu /menu"
-            # msg += "1. "
             send_message(msg, chat)
 
-        elif text == "/menu":
+        elif text == "/help":
             msg = "Daftar Key Word:\n"
-            msg += "1. /list lihat daftar seluruh karyawan\n"
-            msg += "2. /masuk <id> cari data karyawan\n"
-            msg += "3. /detail <id> menampilkan detail karyawan\n"
-
-            send_message(msg, chat)
-        elif text == "/list":
-            items = db.get_count()
-            msg = ""
-            for i in items:
-                msg += "Nama: " + str(i[0]) + "\nJumlah Masuk: " + str(i[2]) + "\n\n"
-            send_message(msg, chat)
-
-        elif text == '/masuk '+txt[-1]:
-            id_data = txt[-1]
-            items = db.search_data(id_data)            
-            msg = ""
-
-            for i in items:
-                msg += "Nama: " + str(i[0]) + "\nJumlah Masuk: " + str(i[2]) + "\n\n"
+            msg += "1. /help lihat daftar seluruh karyawan\n"
+            msg += "2. /register format: /register;spv;kcontact;nama\n"
+            # msg += "3. /detail <id> menampilkan detail karyawan\n"
 
             send_message(msg, chat)
 
-        elif text == '/detail '+txt[-1]:
-            id_data = txt[-1]
-            items = db.get_detail_karyawan(id_data)
+        elif text == "/register":
+            msg = "Format salah, klik /help untuk bantuan"
+            send_message(msg, chat)
+
+        elif text.startswith("/register;"):
+            a = text
+            b = a.split(";")
+
+            spv = b[1]
+            kcontact = b[2]
+            nama = b[3]
+
             msg = ""
 
-            for i in items:
-                msg += "NIK: " + str(i[0])  
-                msg += "\nNama: " + str(i[1]) 
-                msg += "\nAlamat: " + str(i[2]) 
-                msg += "\nKode Pos: " + str(i[3]) 
-                msg += "\nJenis Kelamin: " + str(i[4])
+            try:
+                if db.check_registered(kcontact):
+                    msg = "Anda sudah terdaftar"
+                else:
+                    db.insert_karyawan(kcontact, nama, spv.upper())
+                    msg = "Anda berhasil terdaftar"
+
+            except mysql.connector.Error as e:
+                if e.errno == errorcode.ER_DUP_ENTRY:
+                    print(e.msg)
 
             send_message(msg, chat)
 
-        elif text == '/detail':
-            msg = " tambahkan id karyawan dipisah menggunakan spasi(ex. /karyawan 1)"
-            send_message(msg, chat)
+        elif text.startswith("/rekap;"):
+            a = text.split(";")
+            msg = ""
 
-        elif text == '/masuk':
-            msg = " tambahkan id karyawan dipisah menggunakan spasi(ex. /search 1)"
-            send_message(msg, chat)
+            if a[1] == "LS" or \
+                    a[1] == "SM" or \
+                    a[1] == 'DK' or \
+                    a[1] == "ls" or \
+                    a[1] == "sm" or \
+                    a[1] == "dk":
+                pass
 
-        elif text == 'test':
-            msg = first_name
-            send_message(msg, chat)
+            elif a[1] == 'STO' or a[1] == "sto":
+                data_sto = db.get_sto_abs()
+
+                for i in data_sto:
+                    msg += "1. " + i[0] + "\n- Jumlah Karyawan: " + str(i[1]) + "\n- Jumlah Kehadiran: " + str(
+                        i[2]) + "\n\n"
+
+                send_message(msg, chat)
+            else:
+                kct = db.get_kcontact()
+                msg = ""
+                check = False
+
+                for i in kct:
+                    if a[1] == i[0]:
+                        msg = "ada"
+                        check = True
+                        break
+                    else:
+                        msg = "kosong"
+                        check = False
+
+                try:
+                    if check:
+                        data_kcontact_abs = db.get_kcontact_abs(a[2], a[3], a[1])
+                        bulan = ""
+                        if a[3] == "1":
+                            bulan = "Januari"
+                        elif a[3] == '2':
+                            bulan = "Februari"
+                        elif a[3] == '3':
+                            bulan = 'Maret'
+                        elif a[3] == '4':
+                            bulan = "April"
+                        elif a[3] == '5':
+                            bulan = "Mei"
+                        elif a[3] == '6':
+                            bulan = "Juni"
+                        elif a[3] == '7':
+                            bulan = "Juli"
+                        elif a[3] == '8':
+                            bulan = "Agustus"
+                        elif a[3] == '9':
+                            bulan = "September"
+                        elif a[3] == '10':
+                            bulan = "Oktober"
+                        elif a[3] == '11':
+                            bulan = "November"
+                        elif a[3] == '12':
+                            bulan = "Desember"
+
+
+                        msg = "Tahun: " + a[2] + ", " + "Bulan: " + bulan
+
+                        count = 0
+                        for i in data_kcontact_abs:
+                            msg += "\n" + str(count+1) + ". " + "Tanggal " + str(i[3]) + ", hadir pada jam " + str(i[4])
+                            count += 1
+
+                except IndexError as e:
+                    msg = "Format input salah, silahkan ketik /help untuk bantuan"
+
+                send_message(msg, chat)
 
         else:
             msg = "Pesan tidak dapat dimengerti"
             send_message(msg, chat)
-
-        """        
-        elif text.startswith("/"):
-            msg = "Kata kunci salah"
-            send_message(msg, chat)
-        
-        if text == "/done":
-            keyboard = build_keyboard(items)
-            send_message("Select an item to delete", chat, keyboard)
-        
-        elif text == "/start":
-            send_message("Welcome to your personal To Do list. Send any text to me and I'll store it as an item. Send /done to remove items", chat)
-            # response = 
-        
-        elif text.startswith("/"):
-            continue
-        
-        elif text in items:
-            db.delete_item(text, chat)
-            items = db.get_items(chat)
-            keyboard = build_keyboard(items)
-            send_message("Select an item to delete", chat, keyboard)
-        
-        else:
-            db.add_item(text, chat)
-            items = db.get_items(chat)
-            message = "\n".join(items)
-            send_message(message, chat)
-        """
 
 
 def get_last_chat_id_and_text(updates):
