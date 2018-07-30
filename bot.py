@@ -3,6 +3,7 @@ import requests
 import time
 import urllib
 import mysql.connector
+import datetime
 from mysql.connector import errorcode
 
 from DBHandler import DBHandler
@@ -63,13 +64,29 @@ def handle_updates(updates):
         elif text == "/help":
             msg = "Daftar Key Word:\n"
             msg += "1. /help lihat daftar seluruh karyawan\n"
-            msg += "2. /register format: /register;spv;kcontact;nama\n"
-            # msg += "3. /detail <id> menampilkan detail karyawan\n"
+            msg += "2. /absen format: /absen;kcontact\n"
+            msg += "3. /register format: /register;spv;kcontact;nama\n"
+            msg += "4. /rekap format: /rekap;kcontact;tahun;bulan\n"
+            msg += "5. /rekap format: /rekap;spv;tahun;bulan\n"
+            msg += "6. /rekap format: /rekap;sto\n"
 
             send_message(msg, chat)
 
         elif text == "/register":
             msg = "Format salah, klik /help untuk bantuan"
+            send_message(msg, chat)
+
+        elif text.startswith("/absen;"):
+            a = text
+            b = text.split(";")
+            msg = ""
+
+            if db.check_registered(b[1]):
+                db.insert_absen(str(b[1]), str(datetime.datetime.now()))
+                msg = "Anda telah absen tangga: " + str(datetime.datetime.now().day) + " pada jam: " +str(datetime.datetime.now().strftime("%H:%M"))
+            else:
+                msg = "Anda belum terdaftar"
+
             send_message(msg, chat)
 
         elif text.startswith("/register;"):
@@ -112,7 +129,7 @@ def handle_updates(updates):
 
                     if len(data_sb_spv) > 0:
                         for i in data_sb_spv:
-                            msg += str(count + 1) + ". " + str(i[0]) + ": " + str(i[1]) + "kali masuk\n"
+                            msg += str(count + 1) + ". " + str(i[0]) + ": " + str(i[1]) + " kali masuk.\n"
                     else:
                         msg = "Tidak ada data yang tersedia"
 
@@ -136,11 +153,9 @@ def handle_updates(updates):
 
                 for i in kct:
                     if a[1] == i[0]:
-                        msg = "ada"
                         check = True
                         break
                     else:
-                        msg = "kosong"
                         check = False
 
                 try:
@@ -172,7 +187,6 @@ def handle_updates(updates):
                         elif a[3] == '12':
                             bulan = "Desember"
 
-
                         msg = "Tahun: " + a[2] + ", " + "Bulan: " + bulan
 
                         count = 0
@@ -193,8 +207,10 @@ def handle_updates(updates):
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
     last_update = num_updates - 1
+
     text = updates["result"][last_update]["message"]["text"]
     chat_id = updates["result"][last_update]["message"]["chat"]["id"]
+
     return (text, chat_id)
 
 

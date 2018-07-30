@@ -38,10 +38,11 @@ class DBHandler:
 
 
     def insert_absen(self, kcontact, waktu):
-        insert = "insert into absen(kcontact, waktu) values('"+ kcontact + "','" + waktu +"')"
+        insert = "insert into absen(kcontact, waktu) values('"+ kcontact + "','" + str(waktu) +"')"
         cursor = self.cnx.cursor()
 
         cursor.execute(insert)
+
         self.cnx.commit()
         cursor.close()
         self.cnx.close()
