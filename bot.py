@@ -105,7 +105,21 @@ def handle_updates(updates):
                     a[1] == "ls" or \
                     a[1] == "sm" or \
                     a[1] == "dk":
-                pass
+                msg = ""
+                try:
+                    data_sb_spv = db.get_spv_abs(a[1], a[2], a[3])
+                    count = 0
+
+                    if len(data_sb_spv) > 0:
+                        for i in data_sb_spv:
+                            msg += str(count + 1) + ". " + str(i[0]) + ": " + str(i[1]) + "kali masuk\n"
+                    else:
+                        msg = "Tidak ada data yang tersedia"
+
+                except IndexError as e:
+                    msg = "Format input salah, silahkan ketik /help untuk bantuan"
+
+                send_message(msg, chat)
 
             elif a[1] == 'STO' or a[1] == "sto":
                 data_sto = db.get_sto_abs()

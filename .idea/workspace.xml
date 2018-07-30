@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e70b2b82-022e-4916-8078-abddd7189df9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DBHandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/DBHandler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
     </list>
@@ -12,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/telegram_bot_$telegram_bot.coverage" NAME="telegram bot Coverage Results" MODIFIED="1532915151446" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/telegram_bot_$telegram_bot.coverage" NAME="telegram bot Coverage Results" MODIFIED="1532932545786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -59,7 +60,7 @@
         <counts>
           <entry key="Python Console" value="101" />
           <entry key="cell" value="52" />
-          <entry key="py" value="6880" />
+          <entry key="py" value="7254" />
           <entry key="sql" value="1006" />
           <entry key="txt" value="93" />
         </counts>
@@ -67,7 +68,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="93" />
-          <entry key="Python" value="6981" />
+          <entry key="Python" value="7355" />
           <entry key="SQL" value="15" />
           <entry key="Scratch" value="1043" />
         </counts>
@@ -92,11 +93,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="103" column="30" lean-forward="true" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
+            <state relative-caret-position="332">
+              <caret line="204" lean-forward="true" selection-start-line="204" selection-end-line="204" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -104,16 +105,16 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DBHandler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="177" column="24" selection-start-line="177" selection-start-column="24" selection-end-line="177" selection-end-column="24" />
+            <state relative-caret-position="179">
+              <caret line="173" column="26" lean-forward="true" selection-start-line="173" selection-start-column="26" selection-end-line="173" selection-end-column="26" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
-                <marker date="1532927259555" expanded="true" signature="240:245" ph="..." />
-                <marker date="1532927259555" expanded="true" signature="2703:3000" ph="..." />
-                <marker date="1532927259555" expanded="true" signature="3021:3246" ph="..." />
+                <marker date="1532928656332" expanded="true" signature="240:245" ph="..." />
+                <marker date="1532928656332" expanded="true" signature="2703:3000" ph="..." />
+                <marker date="1532928656332" expanded="true" signature="3021:3246" ph="..." />
               </folding>
             </state>
           </provider>
@@ -131,8 +132,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/57c0bee5-8a33-48c6-9442-a5cacecd1362/console.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="49" lean-forward="true" selection-start-column="49" selection-end-column="49" />
+            <state relative-caret-position="136">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -169,8 +170,8 @@
       <list>
         <option value="$PROJECT_DIR$/dbConnection.py" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/57c0bee5-8a33-48c6-9442-a5cacecd1362/console.sql" />
-        <option value="$PROJECT_DIR$/bot.py" />
         <option value="$PROJECT_DIR$/DBHandler.py" />
+        <option value="$PROJECT_DIR$/bot.py" />
       </list>
     </option>
   </component>
@@ -217,7 +218,15 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/bot.py" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="settings.json.schema" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings module-name="telegram_bot_" is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+        <option name="myModuleName" value="telegram_bot_" />
+      </console-settings>
+    </option>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -306,7 +315,7 @@
       <window_info content_ui="combo" id="Project" order="2" weight="0.25037822" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32850242" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32850242" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -315,7 +324,7 @@
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32850242" />
       <window_info anchor="bottom" id="Database Changes" order="10" sideWeight="0.49924356" weight="0.32850242" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.49924356" visible="true" weight="0.32850242" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49924356" weight="0.32850242" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50075644" side_tool="true" weight="0.32850242" />
       <window_info anchor="bottom" id="Python Console" order="13" sideWeight="0.49924356" weight="0.32850242" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -410,6 +419,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/57c0bee5-8a33-48c6-9442-a5cacecd1362/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="das://57c0bee5-8a33-48c6-9442-a5cacecd1362/schema/absen_bot/table/karyawan">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
@@ -424,32 +440,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/57c0bee5-8a33-48c6-9442-a5cacecd1362/console.sql">
+    <entry file="file://$PROJECT_DIR$/DBHandler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="49" lean-forward="true" selection-start-column="49" selection-end-column="49" />
+        <state relative-caret-position="179">
+          <caret line="173" column="26" lean-forward="true" selection-start-line="173" selection-start-column="26" selection-end-line="173" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
+            <marker date="1532928656332" expanded="true" signature="240:245" ph="..." />
+            <marker date="1532928656332" expanded="true" signature="2703:3000" ph="..." />
+            <marker date="1532928656332" expanded="true" signature="3021:3246" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="103" column="30" lean-forward="true" selection-start-line="103" selection-start-column="30" selection-end-line="103" selection-end-column="30" />
+        <state relative-caret-position="332">
+          <caret line="204" lean-forward="true" selection-start-line="204" selection-end-line="204" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DBHandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="177" column="24" selection-start-line="177" selection-start-column="24" selection-end-line="177" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-            <marker date="1532927259555" expanded="true" signature="240:245" ph="..." />
-            <marker date="1532927259555" expanded="true" signature="2703:3000" ph="..." />
-            <marker date="1532927259555" expanded="true" signature="3021:3246" ph="..." />
           </folding>
         </state>
       </provider>

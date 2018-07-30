@@ -174,5 +174,5 @@ class DBHandler:
         return data_bs_spv
 
 
-db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
-print(db.get_spv_abs('DK','2018', '7'))
+# db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
+# print(db.get_spv_abs('DK','2018', '7'))
