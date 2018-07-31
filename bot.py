@@ -19,7 +19,9 @@ usernama = 'root'
 password = 'mysql'
 host = 127.0.0.1/localhost
 """
-db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
+# db = DBHandler('sql12249899', 'sql12249899', 'sql12.freemysqlhosting.net', 'y9aKxTZBrk')
+db = DBHandler('absen_bot', 'root', '127.0.0.1')
+
 
 
 def get_url(url):
@@ -58,7 +60,7 @@ def handle_updates(updates):
         items = None
 
         if text == "/start":
-            msg = "Halo " + first_name + " jika ingin ke menu /menu"
+            msg = "Halo " + first_name + " jika ingin ke menu /help"
             send_message(msg, chat)
 
         elif text == "/help":
@@ -79,13 +81,29 @@ def handle_updates(updates):
         elif text.startswith("/absen;"):
             a = text
             b = text.split(";")
+            c = db.get_kcontact()
+            check = None
             msg = ""
 
-            if db.check_registered(b[1]):
+            for i in c:
+                if str(b[1]) == i[0]:
+                    check = True;
+                    break
+                else:
+                    check = False
+
+            if check:
                 db.insert_absen(str(b[1]), str(datetime.datetime.now()))
-                msg = "Anda telah absen tangga: " + str(datetime.datetime.now().day) + " pada jam: " +str(datetime.datetime.now().strftime("%H:%M"))
+                msg = "Anda telah absen tanggal: " + str(datetime.datetime.now().day) + " pada jam: " +str(datetime.datetime.now().strftime("%H:%M"))
             else:
                 msg = "Anda belum terdaftar"
+
+
+            # if db.check_registered(str(b[1])):
+            #     db.insert_absen(str(b[1]), str(datetime.datetime.now()))
+            #     msg = "Anda telah absen tanggal: " + str(datetime.datetime.now().day) + " pada jam: " +str(datetime.datetime.now().strftime("%H:%M"))
+            # else:
+            #     msg = "Anda belum terdaftar"
 
             send_message(msg, chat)
 
@@ -128,6 +146,8 @@ def handle_updates(updates):
                     count = 0
 
                     if len(data_sb_spv) > 0:
+                        msg = datetime.datetime.now().strftime("%B, %Y") + ":\n\n"
+
                         for i in data_sb_spv:
                             msg += str(count + 1) + ". " + str(i[0]) + ": " + str(i[1]) + " kali masuk.\n"
                     else:
@@ -138,25 +158,30 @@ def handle_updates(updates):
 
                 send_message(msg, chat)
 
-            elif a[1] == 'STO' or a[1] == "sto":
+            elif a[1] == 'STO' or a[1] == "sto" or a[1] == 'CJA' or a[1] == 'cja':
                 data_sto = db.get_sto_abs()
+                k = 0
+                msg = datetime.datetime.now().strftime("%B, %Y") + ":\n\n"
 
                 for i in data_sto:
-                    msg += "1. " + i[0] + "\n- Jumlah Karyawan: " + str(i[1]) + "\n- Jumlah Kehadiran: " + str(
-                        i[2]) + "\n\n"
+                    prod = (i[2] / i[1]) / datetime.datetime.now().day
+                    msg += i[0] + "\n- Total Teknisi: " + str(i[1]) + "\n- Total Kehadiran: " + str(i[2]) + "\n- Productivity: " + str("%.2f" %prod) +"\n\n"
+
 
                 send_message(msg, chat)
+
             else:
                 kct = db.get_kcontact()
                 msg = ""
                 check = False
 
                 for i in kct:
-                    if a[1] == i[0]:
+                    if str(a[1].upper()) == str(i[0].upper()):
                         check = True
                         break
                     else:
                         check = False
+
 
                 try:
                     if check:
@@ -191,8 +216,17 @@ def handle_updates(updates):
 
                         count = 0
                         for i in data_kcontact_abs:
-                            msg += "\n" + str(count+1) + ". " + "Tanggal " + str(i[3]) + ", hadir pada jam " + str(i[4])
+                            ket = ""
+
+                            if i[5] > 8:
+                                ket = "Terlambat"
+
+                            msg += "\n" + str(count+1) + ". " + "Tanggal " + str(i[3]) + ", hadir pada jam " + str(i[4]) + ", Keterangan: " + ket
                             count += 1
+
+
+                    else:
+                        msg = "Anda belum terdaftar, silahkan ketik /help untuk bantuan."
 
                 except IndexError as e:
                     msg = "Format input salah, silahkan ketik /help untuk bantuan"

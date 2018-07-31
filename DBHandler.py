@@ -8,59 +8,78 @@ import pytz
 class DBHandler:
     waktu = datetime.now()
 
-    def __init__(self, _db, _username, _password, _host):
+    def __init__(self, _db, _username, _host, _password=""):
         self.username = _username
         self.password = _password
         self.db = _db
         self.host = _host
 
         self.cnx = mysql.connector.connect(
-            user=self.username,
-            password=self.password,
-            host=self.host,
-            database=self.db
+        user=self.username,
+        password=self.password,
+        host=self.host,
+        database=self.db
         )
+        # self.cnx.set_autocommit(True)
 
         if self.cnx:
             print("Connection: OK")
         else:
-            print("Connection failed, please check your datbase connection")
+            print("Connection failed, please check your database connection")
+
+        # try:
+        #     self.cnx = mysql.connector.connect(
+        #     user=self.username,
+        #     password=self.password,
+        #     host=self.host,
+        #     database=self.db
+        #     )
+
+        #     self.cnx.set_autocommit(True)
+
+        #     if self.cnx:
+        #         print("Connection: OK")
+        #     else:
+        #         print("Connection failed, please check your database connection")
+        # except:
+        #     print("asdf")
 
 
     def insert_karyawan(self, kcontact, nama, spv):
-        insert = "insert into karyawan(kcontact, nama, spv) values('" + kcontact + "','" + nama + "','" + spv +"')"
+        insert = "insert into karyawan(kcontact, nama, spv) values('" + kcontact.upper() + "','" + nama + "','" + spv.upper() +"')"
         cursor = self.cnx.cursor()
 
         cursor.execute(insert)
         self.cnx.commit()
         cursor.close()
-        self.cnx.close()
 
 
     def insert_absen(self, kcontact, waktu):
-        insert = "insert into absen(kcontact, waktu) values('"+ kcontact + "','" + str(waktu) +"')"
+        insert = "insert into absen(kcontact, waktu) values('"+ kcontact.upper() + "','" + str(waktu) +"')"
         cursor = self.cnx.cursor()
 
         cursor.execute(insert)
 
         self.cnx.commit()
         cursor.close()
-        self.cnx.close()
 
 
     def get_karyawan(self):
-        get = "select * from karyawan"
-        cursor = self.cnx.cursor()
-        data_kar = []
+        try:
+            get = "select * from karyawan"
+            cursor = self.cnx.cursor()
+            data_kar = []
 
-        cursor.execute(get)
-        for data in cursor:
-            data_kar.append(data)
+            cursor.execute(get)
+            for data in cursor:
+                data_kar.append(data)
 
-        self.cnx.commit()
-        cursor.close()
+            self.cnx.commit()
+            cursor.close()
 
-        return data_kar
+            return data_kar
+        except mysql.connector.Error as e:            
+            print(e.msg)
 
 
     def get_absen(self):
@@ -90,7 +109,8 @@ class DBHandler:
         return data_abs
 
     def get_sto_abs(self):
-        get = "select karyawan.spv, count(karyawan.spv), count(absen.id) as absen from karyawan left join absen on absen.kcontact = karyawan.kcontact group by  karyawan.spv order by absen"
+        # get = "select karyawan.spv, count(karyawan.spv), count(absen.id) as absen from karyawan left join absen on absen.kcontact = karyawan.kcontact group by  karyawan.spv order by absen DESC"
+        get = "SELECT karyawan.`spv`, COUNT(DISTINCT(karyawan.`kcontact`)) AS karyawa, COUNT(absen.`id`) AS absensi FROM karyawan JOIN absen ON karyawan.`kcontact` = `absen`.`kcontact` GROUP BY karyawan.`spv` ORDER BY absensi DESC"
         cursor = self.cnx.cursor()
         data_abs = []
 
@@ -127,10 +147,23 @@ class DBHandler:
         cursor.close()
         return res[0]
 
+    def get_totalK(self):
+        query = "select spv, count(*) from karyawan group by (spv)"
+        cursor = self.cnx.cursor()
+        data_kar = []
+
+        cursor.execute(query)
+
+        for i in cursor:
+            data_kar.append(i)
+
+        cursor.close()
+        return data_kar
+
 
     def check_registered(self, kcontact):
-        query = "select count(kcontact) from karyawan where kcontact='"+str(kcontact)+"'"
         cursor = self.cnx.cursor()
+        query = "select count(kcontact) from karyawan where kcontact='"+str(kcontact)+"'"
 
         cursor.execute(query)
         count = cursor.fetchone()[0]
@@ -145,7 +178,7 @@ class DBHandler:
             return False
 
     def get_kcontact_abs(self, y, m, kcontact):
-        query = "SELECT kcontact, YEAR(waktu), MONTH(waktu), day(waktu), TIME(waktu) FROM absen where year(waktu)=" + y +" and month(waktu)="+ m +" and kcontact='"+ kcontact +"' ORDER BY(waktu) ASC;"
+        query = "SELECT kcontact, YEAR(waktu), MONTH(waktu), day(waktu), TIME(waktu),hour(waktu) FROM absen where year(waktu)=" + y +" and month(waktu)="+ m +" and kcontact='"+ kcontact +"' ORDER BY(waktu) ASC;"
         cursor = self.cnx.cursor()
         data_abs_bln = []
 
@@ -175,5 +208,5 @@ class DBHandler:
         return data_bs_spv
 
 
-# db = DBHandler('absen_bot', 'root', 'mysql', '127.0.0.1')
-# print(db.get_spv_abs('DK','2018', '7'))
+# db = DBHandler('absen_bot', 'root', '127.0.0.1')
+# print(db.get_totalK()[2][1])
